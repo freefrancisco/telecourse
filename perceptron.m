@@ -42,7 +42,6 @@ function [new_perceptron, error_count] = learn(old_perceptron, points, classes)
   errors = find(classes!=guess);
   error_count = length(errors);
   if(error_count == 0)
-    "DONE!!"
     new_perceptron = old_perceptron;
   else
     i = errors(randi(error_count));
@@ -52,10 +51,13 @@ function [new_perceptron, error_count] = learn(old_perceptron, points, classes)
   plot_classifier(new_perceptron);
 end
 
-function [classifier, errors] = run(classifier, points, classes, times)
-  for i = 1:times
+function [classifier, count] = run(classifier, points, classes)
+  errors = 1;
+  count = 0;
+  while(errors > 0)
     [classifier, errors] = learn(classifier, points, classes);
-    usleep(1000);
+    count+=1;
+    usleep(500);
   end
 end
 
@@ -66,13 +68,9 @@ plot_data(points, classes)
 
 plot_classifier(separator)
 
-classifier = [0,0,0]
+separator
 
-% sleep(2)
-% 
-% for i = 1:20
-%   [classifier, errors] = learn(classifier, points, classes)
-%   sleep(2)
-% end
+pause(2)
 
+[classifier, count] = run(classifier, points, classes)
 

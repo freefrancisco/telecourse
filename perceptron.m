@@ -5,7 +5,7 @@ hold off
 
 %generate_data: points as column vectors, a random separator, and a classification based on separator
 function [points, classes, separator] = generate_data
-  points = 2*rand(2,10)-1; %100 column vectors
+  points = 2*rand(2,100)-1; %100 column vectors
   points_for_line = 2*rand(2) - 1; %two points to define a line as separator
   vector = planerot([0,1]) * (points_for_line(:,2) - points_for_line(:,1)); % orthogonal difference between points
   vector = vector / norm(vector); %normalize
@@ -46,8 +46,6 @@ function [new_perceptron, error_count] = learn(old_perceptron, points, classes)
     new_perceptron = old_perceptron;
   else
     i = errors(randi(error_count));
-    [i, classes(i), guess(i)]
-    [1, points(:,i)']
     new_perceptron = old_perceptron + classes(i)*[1,points(:,i)'];
   end
   plot_data(points, classes);
@@ -56,8 +54,8 @@ end
 
 function [classifier, errors] = run(classifier, points, classes, times)
   for i = 1:times
-    [classifier, errors] = learn(classifier, points, classes)
-    sleep(1)
+    [classifier, errors] = learn(classifier, points, classes);
+    usleep(1000);
   end
 end
 

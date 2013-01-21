@@ -5,11 +5,11 @@ function [es, ws] = pla(X, y, method="zeros")
   errors = 1:error_count;
   switch method
   case "random"
-    w = random_linear_separator(2)
+    w = random_linear_separator(2);
   case "regression"
-    w = pinv(X)*y
+    w = pinv(X)*y;
   otherwise % zeros
-    w = [1; 0; 0]
+    w = [1; 0; 0];
   end
   classes = sign(y);
   while(error_count > 0)

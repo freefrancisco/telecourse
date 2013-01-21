@@ -1,25 +1,39 @@
-1; 
+err_in = [];
+err_out = [];
 
-[X, y, separator_w] = generate_data(200);
-%or equivalently we could just use
-regression_w1 = inv(X'*X)*X'*y; 
-regression_w2 = pinv(X)*y;
+for i = 1:1000
 
-[separator_w, regression_w1, regression_w2]
-[regression_w1 - separator_w]
-[regression_w2 - separator_w]
-[regression_w2 - regression_w1]
-% plot_Xy(X, y);
+  f = random_linear_separator(2); % target function
+  X_in = random_points(100, 2); % X in sample
+  y_in = classify(X_in, f); % y in sample
 
-plot_Xy(X, y);
-plot_w(separator_w);  % plot the original separator
-pause
-plot_Xy(X, y);
-plot_w(regression_w1);  % plot the original separator
-pause
-plot_Xy(X, y);
-plot_w(regression_w2);  % plot the original separator
-% [ws, es] = pla(X, y);
-% printf("press enter to see animation of pla working");
-% pause
-% animate_pla(X, y, ws, es);
+  g = pinv(X_in)*y_in; % regression here
+
+  y_est = classify(X_in, g); %estimated y
+  e_in = length(find(y_est != y_in)) / length(y_in); % error rate in sample
+  err_in = [err_in, e_in];
+
+  % plot_Xy(X_in, y_in);
+  % plot_w(f, "black");
+  % plot_w(g, "green", true);
+  % pause
+
+  X_out = random_points(1000, 2); % X out of sample
+  y_out = classify(X_out, f);
+
+  y_est = classify(X_out, g);
+  e_out = length(find(y_est != y_out)) / length(y_out); % error rate out of sample
+  err_out = [err_out, e_out];
+
+  % plot_Xy(X_out, y_out);
+  % plot_w(f, "black");
+  % plot_w(g, "green", true);
+end
+figure(1)
+hist(err_in)
+figure(2)
+hist(err_out)
+
+mean(err_in)
+mean(err_out)
+
